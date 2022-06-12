@@ -166,6 +166,14 @@ Many people seem to build monitoring without understanding its purpose. They see
 That is monitoring doesn't exist to generate alerts: alerts are just one possible outcome. With this in mind, remember that every metric you collect and graph does not need to have a corresponding alert. 
 
 
+### Pattern #2 Monitor from the User Perspective
+
+The best place to add monitoring first is at the point(s) users interact with your app. Your app and infrastructure are complex, with lots and lots of moving parts – failure could happen anywhere! By monitoring from the user's perspective first, you begin to free yourself from the worry of caring about individual odes. If your database server's CPU has started to spike, but the user isn't impacted, do you really have a problem? (I'm not sure I agree with the author, a spike in a DB CPU might be a sign that your app is on the verge of breakdown...)
+
+<center>![img](img/monitor-from-user-perspective.PNG)</center>
+
+Of course, this is not the only place you should instrument your app for monitoring. Monitoring the user point of contacts won't tell you what is wrong, only that something is and that it's impacting the user. You should quickly expand your efforts to instrumenting components such that you'll be able to drill down further during incident investigation. Go as deep and wide as you want, but always be asking yourself, "How will these metrics show me the user impact?".
+
 
 # Glossary
 
