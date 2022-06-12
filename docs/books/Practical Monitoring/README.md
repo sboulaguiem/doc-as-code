@@ -1,6 +1,6 @@
-## Why?
+**Practical Monitoring - Effective Strategies For The Real World - *Jim Coplien***
 
-I discovered *-or currently discovering, depending on when you're reading this*, the subject of monitoring during my last internship before officially becoming an engineer. I found the subject very interesting! Unfortunately, I didn't get the chance to learn it properly, simply because my internship tasks were time-sensitive and I had to deliver working software: more often than not, **"making-it-work"** type-tasks took over the **"me-taking-the-time-to-actually-understand-everything-I'm-doing-and-learning"** type-tasks...
+I discovered *-or currently discovering, depending on when you're reading this*- the subject of monitoring during my last internship before officially becoming an engineer. I found the subject very interesting! Unfortunately, I didn't get the chance to learn it properly, simply because my internship tasks were time-sensitive and I had to deliver working software: more often than not, **"making-it-work"** type-tasks took over the **"me-taking-the-time-to-actually-understand-everything-I'm-doing-and-learning"** type-tasks...
 
 I am aware that this is a normal and intergral part of being an engineer: the value we provide is the working software we deliver. As long as the quality doesn't suffer, we must always be value-driven. Nevertheless, I can't say this wasn't frustrating. Not having the time to learn the ins-and-outs of a subject that interests you...
 
@@ -11,5 +11,5 @@ Anyhow... Let the journey begin :)
 
 ## Syllabus
 
-1. [Part I: Monitoring Principles](Part-I-Monitoring-Principles.md)
+1. [Part I: Monitoring Principles](Part%20I%20Monitoring%20Principles.md)
 2. TODO

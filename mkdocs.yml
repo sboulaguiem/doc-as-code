@@ -1,0 +1,17 @@
+site_name: Saad's notes
+site_url: https://sboulaguiem.github.io/doc-as-code/
+theme:
+  name: material
+nav:
+  - Home: index.md
+  - Blog: 
+    - It's about time: blog/It's about time.md
+  - Books:
+    - How to Read a Book:
+      - About the book: books/How to read a book/README.md
+      - I. The Dimensions of Reading: books/How to read a book/Part I The dimension of reading.md
+    - Practical Monitoring:
+      - About the book: books/Practical Monitoring/README.md
+      - I. Monitoring Principles: books/Practical Monitoring/Part I Monitoring Principles.md
+    
+      

@@ -1,0 +1,1 @@
+Notes taken during my journey to become a well-rounded software engineer.
