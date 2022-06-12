@@ -67,6 +67,82 @@ Avoid the tendency to lean on monitoring as a crutch. Monitoring is great for al
 
 Your monitoring should be 100% automated. Services should self-register instead of someone having to add them. The difficulty in building a well-monitored infrastructure and app without automation cannot be overstated.
 
+#### Wrap-up
+Now that you know the monitoring anti-patterns to watch out for and how to fix them, you can build positive monitoring habits. And for that, we’ll need to talk about the inverse of the anti-pattern: the design pattern.
+
+## Chapter 2. Monitoring Design Patterns
+### Pattern #1 Composable Monitoring
+
+The principle of Composable monitoring is simple: use multiple specialized tools and couple them loosely together, forming a monitoring platform. Composable monitoring can be thought of as the UNIX philosophy in action:
+
+**<p style="text-align: center;"> Write programs that do one thing and do it well. Write programs to work together. -Doug McIlroy</p>**
+
+One of the biggest perks of composable monitoring is the flexibility it provides. If one tool no longer suits your needs, you can remove it and replace it with another, instead if replacing your entire platform. Making sure that all the different tools communicate well with each other might lead to a more complex architecture, but the benefits far outweigh the costs.
+
+#### The Components of a Monitoring Service
+
+If we are to build a monitoring platform from loosely coupled specialized components, we fist have to break down what the facets of a monitoring system are. A monitoring service has five primary facets:
+
+- Data collection
+- Data storage
+- Visualization
+- Analytics and reporting
+- Alerting
+
+Let's dig into each of these components:
+
+##### Data Collection
+
+There are two primary ways for data collection to happen: push or pull.
+
+In the **pull model**, a service will request that a remote node sends data about itself. The central service is responsible for scheduling when those request happen. A typical use case is the /health endpoint pattern in application monitoring, which exposes metrics and health information about an app to an HTTP endpoint, which can be polled by a monitoring service, a service discovery tool, or by a load balancer.
+When it comes to metrics, there are some annoying downsides for a pull-based mechanism: a pull model can be difficult to scale as it requires central systems to keep track of known clients, handle scheduling, and parsing returning data.
+
+In the **push model**, a client (a server, an application, etc.) pushes data to another location. The client may do so on a regular schedule or as events occur. I don't really understand why, but the author says that a push model is easier to scale in a distributed architecture. Nodes pushing data need only know where to send it, and don't need to worry about underlying implementation of the receiving ends. As a result, the push model can have better redundancy and high availability. 
+
+As for what data we may be gathering, we're concerned about two types: metrics and logs.
+
+###### Metrics
+
+Metrics come in different representations:
+
+- Counter: A counter in an ever-increasing metric. The odometer in your car is an example of a counter. Counters are great for such things as counting the cumulative number of visitors to your website.
+- Gauge: A gauge in a point-in-time value. The speedometer in your car is an example of a gauge. The nature of a gauge has one big shortcoming: it doesn't tell you anything about previous values and provides no hints for future values. However, storing gauge values in a TSDB, you can retrieve them later and do such things as plot them on a graph.
+
+###### Logs
+
+Logs are essentially strings of text with (hopefully) a timestamp associated with them to denote when the event occurred. Logs come in two types: **unstructured and structured**.
+
+Most of us are used to dealing with unstructured logs. For example, consider this log entry from NGINX, a popular web server:
+
+```
+192.34.63.77 - - [26/Jun/2016:14:06:22 -0400] "GET / HTTP/1.1" 301 184 "-" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 (StatusCake)" "-"
+```
+
+If I were to ask you to tell me what the status code and user agent were, would you immediately know? Unstructured logs have no explicit mapping of meaning to a particular field, so if you're unfamiliar with NGINX or web servers, you would have a difficult time answering the question without finding the NGINX documentation.
+Let's take this same log entry and turn in into a structured log entry with JSON:
+```JSON
+{
+  "remote_addr": "192.34.63.77",
+  "remote_user": "-",
+  "time": "2016-06-26T14:06:22-04:00",
+  "request": "GET / HTTP/1.1",
+  "status": "301",
+  "body_bytes_sent": "184",
+  "http_referrer": "-",
+  "http_user_agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 (StatusCake)",
+  "http_x_forwarded_for": "-"
+}
+```
+Quickly understanding what a field means is so much easier now that semantics are explicit. Even better is that now we can let computers do what computers do best and extract the information for us with ease. I encourage you to use structured logging where you can. 
+
+> **<p style="text-align: center;"> SOMETIMES UNSTRUCTURED LOGS ARE BEST </p>**
+> If the logs are low volume, explicitly meant for human consumption, and you don't need any tools more complicated than grep and tail, I would keep your logs unstructured. No need to complicate things unnecessarily. 
+> That said, the majority of your logs should probably be structured and sent to a system capable of parsing them.
+
+Log collection can be done is a couple different ways, but the most common (and easiest) is to set up log forwarding on your systems. Log forwarding allows you to tell your systems to send their logs to another place instead of letting them sit locally on the system. The benefits are obvious, as you can now analyze logs from many systems from a single place instead of logging into multiple systems. 
+
+
 # Glossary
 
 - **Single-pane-of-glass:** Single pane of glass is a term used throughout the IT and management fields relating to a management tool that unifies data or interfaces across several different sources and presents them in a single view.
