@@ -143,11 +143,30 @@ Quickly understanding what a field means is so much easier now that semantics ar
 Log collection can be done is a couple different ways, but the most common (and easiest) is to set up log forwarding on your systems. Log forwarding allows you to tell your systems to send their logs to another place instead of letting them sit locally on the system. The benefits are obvious, as you can now analyze logs from many systems from a single place instead of logging into multiple systems. 
 
 
+##### Data storage
+Metrics, being time series, are usually stored in a Time Series Database (TSDB). The data stored in a TSDB is essentially key-value pairs made up of a timestamp and a value. This key-value pair is referred to as a datapoint. Many TSDBs "roll up" or "age out" data after a certain time period. This means that as the data gets older, multiple datapoints are summarized into a single datapoint, typically by calculating the average. Metric rollup occurs as a result of compromises: storing native resolution (i.e. same resolution as the polling resolution) for metrics gets very expensive for disk storage and in the time it takes to read all of those datapoints from disk for use in a graph. For some kinds of metrics, it is certainly the case that rolling up data is undesirable. However, when it comes to operational data (CPU, throughput,  response time etc...), you are far more concerned with recent events, and only with a general idea of older trends.
+
+Log storage comes in two different flavors. Some systems store the data as simple flat files, while more advanced solutions store log files in a search engine (such as Elasticsearch). If you actually want to use your logs, you will be interested in the latter. Storing logs can get expensive as well. It's not uncommon to generate terabytes worth of data per day. There's not a magic solution to this problem, but compression and retention policies can help.
+
+##### Visualization
+Interesting Sources: The Visual Display of Quantitative Information - Edward Tufte and Information Dashboard Design - Stephen Few.
+
+In terms of graphical components, this section only tells us that the most common visualization for time series data is the line graph. The author doesn't give much more advice on which type of graph to use for which type of situation, although he has a particular dislike for pie charts. He goes on to discuss dashboards in general and says that useful dashboards have different perspectives and scopes, and that them focus on displaying the status of a single service or one product. Even more dashboards could be built for different aspects of those services. In any case, these dashboards are most effective if they are created and maintained by the people who understand the service the best.
+
+##### Analytics and Reporting
+For some types of monitoring and data, it can be helpful to go beyond visualization and into the realms of analytics and reporting. One of the most common use cases here is reporting on service-level availability (SLA) of your applications and services. An SLA is an agreement between you and your customer on how much availability or downtime can be expected from your service each year. Availability is referred to by the number of nines (99% is two nines, 99.99 is four etc...). In a simple infrastructure, the math is straightforward: a = uptime/total time. 
+
+For more complex architectures, it gets trickier. You'd have to take into account all the components of you app. What about dependencies? You are as available as your dependencies, do you take them into account? What about the Nyquist-Shannon theorem? What sampling rate would you use?
+
+##### Alerting
+Many people seem to build monitoring without understanding its purpose. They seem to believe that the driving purpose of a monitoring system is to alert you when things go wrong. Monitoring has a higher purpose:
+
+>Monitoring is for asking questions - Dave Josephsen, Monitorama 2016
+
+That is monitoring doesn't exist to generate alerts: alerts are just one possible outcome. With this in mind, remember that every metric you collect and graph does not need to have a corresponding alert. 
+
+
+
 # Glossary
 
 - **Single-pane-of-glass:** Single pane of glass is a term used throughout the IT and management fields relating to a management tool that unifies data or interfaces across several different sources and presents them in a single view.
-
-
-
-
-
